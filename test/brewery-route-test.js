@@ -3,6 +3,7 @@
 const expect = require('chai').expect;
 const request = require('superagent');
 const Brewery = require('../model/brewery.js');
+const Beer = require('../model/beer.js');
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 
@@ -19,6 +20,12 @@ const exampleBrewery = {
   name: 'the brewery name',
   address: 'the address',
   phoneNumber: '555-555-5555',
+};
+
+const exampleBeer = {
+  name: 'test beer',
+  style: 'test style',
+  ibu: '45'
 };
 
 const newBrewery = {
@@ -72,6 +79,10 @@ describe('Brewery Routes', function() {
         new Brewery(exampleBrewery).save()
         .then( brewery => {
           this.tempBrewery = brewery;
+          return Beer.findByIdAndAddBeer(brewery._id, exampleBeer);
+        })
+        .then( beer => {
+          this.tempBeer = beer;
           done();
         })
         .catch(done);
@@ -96,6 +107,10 @@ describe('Brewery Routes', function() {
           expect(res.body.name).to.equal('the brewery name');
           expect(res.body.address).to.equal('the address');
           expect(res.body.phoneNumber).to.equal('555-555-5555');
+          expect(res.body.beers.length).to.equal(1);
+          expect(res.body.beers[0].name).to.equal('test beer');
+          expect(res.body.beers[0].style).to.equal('test style');
+          expect(res.body.beers[0].ibu).to.equal('45');
           done();
         });
       });
