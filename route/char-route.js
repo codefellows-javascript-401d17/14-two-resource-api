@@ -10,7 +10,7 @@ const charRouter = module.exports = new Router();
 charRouter.post('/api/house/:houseID/char', jsonParser, function(req, res, next) {
   debug('POST: /api/house/:houseID/char');
 
-  House.findByIdAndAddNote(req.params.houseID, req.body)
+  House.findByIdAndAddChar(req.params.houseID, req.body)
   .then(char => res.json(char))
   .catch(next);
 });

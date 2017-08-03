@@ -8,7 +8,7 @@ const House = require('../model/house.js');
 const houseRouter = module.exports = new Router();
 
 houseRouter.post('/api/house', jsonParser, function(req, res, next) {
-  debug('POST: /api/list');
+  debug('POST: /api/house');
 
   new House(req.body).save()
   .then(house => res.json(house))

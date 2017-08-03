@@ -14,14 +14,14 @@ const houseSchema = Schema({
   characters: [{ type: Schema.Types.ObjectId, ref: 'char'}]
 });
 
-const House = module.exports = mongoose.model('house', houseScema);
+const House = module.exports = mongoose.model('house', houseSchema);
 
-House.findByIdAndAddNote = function(id, char) {
-  debug('findByIdAndAddNote');
+House.findByIdAndAddChar = function(id, char) {
+  debug('findByIdAndAddChar');
 
   return House.findById(id)
   .catch(err => Promise.reject(createError(404, err.message)))
-  .then(list => {
+  .then(house => {
     char.houseID = house._id;
     this.tempHouse = house;
     return new Char(char).save();
