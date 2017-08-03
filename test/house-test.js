@@ -106,7 +106,7 @@ describe('House Routes', function() {
         }
       });
 
-      it('should return a character', done => {
+      it('should return a house', done => {
         var updated = { familyName: 'Harkonnen' };
 
         request.put(`${url}/api/house/${this.tempHouse._id}`)
