@@ -4,7 +4,9 @@ const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
 const debug = require('debug')('char:house-router');
 const createError = require('http-errors');
+
 const House = require('../model/house.js');
+
 const houseRouter = module.exports = new Router();
 
 houseRouter.post('/api/house', jsonParser, function(req, res, next) {

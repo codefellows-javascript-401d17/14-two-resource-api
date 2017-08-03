@@ -3,7 +3,9 @@
 const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
 const debug = require('debug')('char:char-router');
+
 const House = require('../model/house.js');
+const Char = require('../model/char.js');
 
 const charRouter = module.exports = new Router();
 
