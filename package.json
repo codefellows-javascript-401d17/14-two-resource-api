@@ -20,5 +20,20 @@
   "bugs": {
     "url": "https://github.com/ohjonah/14-two-resource-api/issues"
   },
-  "homepage": "https://github.com/ohjonah/14-two-resource-api#readme"
+  "homepage": "https://github.com/ohjonah/14-two-resource-api#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
+    "debug": "^2.6.8",
+    "express": "^4.15.3",
+    "http-errors": "^1.6.1",
+    "mongoose": "^4.11.5",
+    "morgan": "^1.8.2"
+  },
+  "devDependencies": {
+    "chai": "^4.1.0",
+    "mocha": "^3.5.0",
+    "superagent": "^3.5.2"
+  }
 }
