@@ -7,23 +7,9 @@
     "lib": "lib",
     "test": "test"
   },
-  "dependencies": {
-    "bluebird": "^3.5.0",
-    "body-parser": "^1.17.2",
-    "chai": "^4.1.0",
-    "debug": "^2.6.8",
-    "cors": "^2.8.4",
-    "express": "^4.15.3",
-    "mongoose": "^4.11.5",
-    "morgan": "^1.8.2",
-    "superagent": "^3.5.2"
-  },
-  "devDependencies": {
-    "mocha": "^3.5.0"
-  },
   "scripts": {
-    "test": "mocha",
-    "start": "node server.js"
+    "test": "DEBUG='house*' mocha",
+    "start": "DEBUG='house*' node server.js"
   },
   "repository": {
     "type": "git",
@@ -35,5 +21,19 @@
   "bugs": {
     "url": "https://github.com/ragnaroksedge/14-two-resource-api/issues"
   },
-  "homepage": "https://github.com/ragnaroksedge/14-two-resource-api#readme"
+  "homepage": "https://github.com/ragnaroksedge/14-two-resource-api#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
+    "debug": "^2.6.8",
+    "express": "^4.15.3",
+    "mongoose": "^4.11.5",
+    "morgan": "^1.8.2"
+  },
+  "devDependencies": {
+    "chai": "^4.1.0",
+    "mocha": "^3.5.0",
+    "superagent": "^3.5.2"
+  }
 }
