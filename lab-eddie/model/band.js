@@ -12,3 +12,4 @@ const bandSchema = Schema({
 });
 
 
+module.exports = mongoose.model('band', bandSchema);
