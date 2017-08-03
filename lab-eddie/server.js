@@ -4,7 +4,7 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const debug = require('debug');
+const debug = require('debug')('band:server');
 const Promise = require('bluebird');
 
 const app = express();
