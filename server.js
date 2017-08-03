@@ -3,7 +3,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const Promise = require('bluebird');
 const mongoose = require('mongoose');
-const debug = require('debug')('note:server');
+const debug = require('debug')('bakedGoods:server');
 
 const bakeryRouter = require('./route/bakery-route.js');
 const bakedGoodsRouter = require('./baked-goods-route.js');
