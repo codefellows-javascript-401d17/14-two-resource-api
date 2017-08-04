@@ -58,4 +58,51 @@ describe('Beer Routes', function(){
       });
     });
   });
+  describe('GET: /api/brewery/:breweryID/beer/:id', function() {
+    describe('with a valid body', function() {
+      before( done => {
+        new Brewery(exampleBrewery).save()
+        .then(brewery => {
+          this.tempBrewery = brewery;
+          return Brewery.findByIdAndAddBeer(brewery._id, exampleBeer);
+        })
+        .then(beer => {
+          this.tempBeer = beer;
+          done();
+        })
+        .catch(done);
+      });
+
+      after(done => {
+        Promise.all([
+          Brewery.remove({}),
+          Beer.remove({})
+        ])
+        .then(() => done())
+        .catch(done);
+      });
+
+      it('should return a beer', done => {
+        request.get(`${url}/api/brewery/${this.tempBrewery._id}/beer/${this.tempBeer._id}`)
+        .end((err, res) => {
+          if(err) return done(err);
+          console.log(this.tempBeer);
+          expect(res.status).to.equal(200);
+          expect(res.body.name).to.equal('test beer');
+          expect(res.body.style).to.equal('test style');
+          expect(res.body.ibu).to.equal('45');
+          done();
+        });
+      });
+
+      it('should return 404 not found', done => {
+        request.get(`${url}/api/brewery/${this.tempBrewery._id}/beer/123469`)
+        .end((err, res) => {
+          expect(res.status).to.equal(404);
+          done();
+        });
+      });
+    });
+  });
+
 });
