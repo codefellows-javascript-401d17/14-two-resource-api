@@ -1,8 +1,8 @@
 'use strict';
 
 const Router = require('express').Router;
-const jsonParser = require('body-parser');
-const debug = require('brewery:beer router');
+const jsonParser = require('body-parser').json();
+const debug = require('debug')('brewery:beer router');
 const Brewery = require('../model/brewery.');
 
 const beerRouter = module.exports = new Router();
