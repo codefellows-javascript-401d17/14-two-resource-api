@@ -30,6 +30,6 @@ Movie.findByIdAndAddActor = function(id, actor) {
     return this.tempMovie.save();
   })
   .then( ()=>{
-    return this.tempMovie;
+    return this.tempActor;
   });
 };

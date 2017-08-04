@@ -49,11 +49,12 @@ describe('Actor Tests', function(){
         .end((err,res) => {
           if(err) return done(err);
           expect(res.status).to.equal(200);
+          console.log(res.body);
           expect(res.body.name).to.equal(exampleActor.name);
           expect(res.body.age).to.equal(exampleActor.age);
           done();
-        })
-      })
-    })
-  })
-})
+        });
+      });
+    });
+  });
+});
