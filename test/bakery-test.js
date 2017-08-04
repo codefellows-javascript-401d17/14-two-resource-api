@@ -3,7 +3,7 @@
 const expect = require('chai').expect;
 const request = require('superagent');
 const Bakery = require('../model/bakery.js');
-const bakedGood = require('../model/bakedgood.js');
+// const bakedGood = require('../model/bakedgood.js');
 const mongoose = require('mongoose');
 
 const PORT = process.env.PORT || 3000;
@@ -53,9 +53,8 @@ describe('Bakery Routes', function() {
     describe('with a valid body', function() {
       before( done => {
         new Bakery(exampleBakery).save()
-        .then( bakery => {
+        .then( (bakery) => {
           this.tempBakery = bakery;
-          console.log('function return:', Bakery.findByIdAndAddBakedGood(bakery._id, exampleBakedGood));
           return Bakery.findByIdAndAddBakedGood(bakery._id, exampleBakedGood);
         })
         .then( bakedGood => {
@@ -80,6 +79,65 @@ describe('Bakery Routes', function() {
         .end((err, res) => {
           if (err) return done(err);
           expect(res.status).to.equal(200);
+          expect(res.body.name).to.equal('Test Bakery');
+          done();
+        });
+      });
+    });
+  });
+
+  describe('PUT: /api/bakery/:id', function() {
+    describe('with a valid body', function() {
+
+      before( done => {
+        new Bakery(exampleBakery).save()
+        .then( bakery => {
+          this.tempBakery = bakery;
+          done();
+        })
+        .catch(done);
+      });
+
+      after( done => {
+        if (this.tempBakery) {
+          Bakery.remove({})
+          .then( () => done())
+          .catch(done);
+        }
+      });
+
+      it('should return an updated bakery', done => {
+        var updated = { name: 'updated bakery' };
+
+        request.put(`${url}/api/bakery/${this.tempBakery._id}`)
+        .send(updated)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(200);
+          expect(res.body.name).to.equal(updated.name);
+          done();
+        });
+      });
+    });
+  });
+
+  describe('DELETE: /api/bakery/:id', function() {
+    describe('with a valid id', function() {
+
+      before( done => {
+        new Bakery(exampleBakery).save()
+        .then( bakery => {
+          this.tempBakery = bakery;
+          done();
+        })
+        .catch(done);
+      });
+
+      it('should delete a bakery', done => {
+        request.delete(`${url}/api/bakery/${this.tempBakery._id}`)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(204);
           done();
         });
       });

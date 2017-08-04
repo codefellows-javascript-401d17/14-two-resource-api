@@ -22,7 +22,7 @@ Bakery.findByIdAndAddBakedGood = function(id, bakedGood) {
   .then( bakery => {
     bakedGood.bakeryID = bakery._id;
     this.tempBakery = bakery;
-    return new BakedGood(bakery).save();
+    return new BakedGood(bakedGood).save();
   })
   .then( bakedGood => {
     this.tempBakery.bakedGoods.push(bakedGood._id);

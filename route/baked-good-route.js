@@ -7,8 +7,8 @@ const Bakery = require('../model/bakery.js');
 
 const bakedGoodRouter = module.exports = new Router();
 
-bakedGoodRouter.post('/api/bakery/:bakeryID/bakedGood', jsonParser, function(req, res, next) {
-  debug('POST: /api/bakery/:bakeryID/bakedGood');
+bakedGoodRouter.post('/api/bakery/:bakeryID/bakedgood', jsonParser, function(req, res, next) {
+  debug('POST: /api/bakery/:bakeryID/bakedgood');
 
   Bakery.findByIdAndAddBakedGood(req.params.bakeryID, req.body)
   .then( bakedGood => res.json(bakedGood))

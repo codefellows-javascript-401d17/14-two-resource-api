@@ -30,7 +30,7 @@ bakeryRouter.get('/api/bakery/:id', function(req, res, next) {
 bakeryRouter.put('/api/bakery/:id', jsonParser, function(req, res, next) {
   debug('PUT: /api/bakery/:id');
 
-  Bakery.findByIdAndRemove(req.params.id, req.body, { new: true })
+  Bakery.findByIdAndUpdate(req.params.id, req.body, { new: true })
   .then( bakery => res.json(bakery))
   .catch( err => {
     if (err.name === 'ValidationError') return next(err);
