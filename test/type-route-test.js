@@ -22,7 +22,7 @@ const examplePokemon = {
 };
 
 describe('Type Routes', function() {
-  describe('POST: /api/pokemon/:pokemonID/song', function() {
+  describe('POST: /api/pokemon/:pokemonID/type', function() {
     describe('with a valid id and a type body', () => {
       before(done => {
         new Pokemon(examplePokemon).save()
@@ -102,7 +102,7 @@ describe('Type Routes', function() {
     });
   });
 
-  describe('PUT: /api/pokemon/:pokemonID/song/:id', function() {
+  describe('PUT: /api/pokemon/:pokemonID/type/:id', function() {
     describe('with a valid body', function() {
       before(done => {
         new Pokemon(examplePokemon).save()
@@ -160,7 +160,7 @@ describe('Type Routes', function() {
     });
   });
 
-  describe('DELETE: /api/pokemon/:pokemonID/song/:id', function() {
+  describe('DELETE: /api/pokemon/:pokemonID/type/:id', function() {
     describe('with valid id', function() {
 
       before(done => {
