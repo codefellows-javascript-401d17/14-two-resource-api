@@ -23,13 +23,14 @@ bandRouter.get('/api/band/:id', function(req, res, next) {
   .populate('albums')
   .populate('tracks')
   .then(band => {
-    console.log(band);
     res.json(band)})
   .catch(err => next(createError(404, err.message)));
 });
 
-bandRouter.put('api/band/:id', jsonParser, function(req, res, next){
+bandRouter.put('/api/band/:id', jsonParser, function(req, res, next){
   debug('PUT: /band/api/:id');
+
+  if(Object.keys(req.body).length === 0) return next(createError(400, 'Bad Request'));
 
   Band.findByIdAndUpdate(req.params.id, req.body, {new: true})
   .then(band => res.json(band))

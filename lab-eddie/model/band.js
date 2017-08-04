@@ -27,6 +27,7 @@ Band.findByIdAndAddAlbum = function(id, album) {
   })
   .then(album => {
     this.tempBand.albums.push(album._id);
+    this.tempBand.save();
     this.tempAlbum = album;
   })
   .then(() => this.tempAlbum);
