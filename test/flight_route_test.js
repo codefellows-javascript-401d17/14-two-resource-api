@@ -42,4 +42,36 @@ describe('Flight Router', function () {
       })
     })
   })
+  describe('GET /api/airport/:airportID/flight/', function () {
+    describe('when provided a valid flight id', function () {
+      before((done) => {
+        Airport.create(exampleAirportBody)
+          .then((airport) => {
+            this.tempAirport = airport;
+            Airport.findByIdAndAdd(this.tempAirport._id, exampleFlightBody);
+            done();
+          })
+          .catch((err) => {
+            done(err);
+          })
+      })
+      after((done) => {
+        Promise.all([
+          Airport.remove({}),
+          Flight.remove({})
+        ])
+          .then(() => done())
+          .catch(done);
+      })
+      it('responds with a note', (done) => {
+        request.get(`${url}/api/airport/${this.tempAirport._id}`)
+          .send(exampleFlightBody)
+          .end((err, rsp) => {
+            if (err) console.log(err.message);
+            expect(rsp.status).to.equal(200);
+            done();
+          })
+      })
+    })
+  })
 })

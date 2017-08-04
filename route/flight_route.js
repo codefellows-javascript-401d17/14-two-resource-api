@@ -11,3 +11,13 @@ flightRouter.post('/api/airport/:airportID/flight', jsonParser, function (req, r
     })
     .catch(next);
 });
+
+flightRouter.get('/api/airport/:airportID/flight', function (req, rsp, next) {
+  Airport.findById(req.params.airportID)
+    .populate('flight')
+    .exec(function (err, something) {
+      if(err) console.log(err);
+      console.log('****************', something);
+    })
+});
+
