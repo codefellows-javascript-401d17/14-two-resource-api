@@ -25,8 +25,8 @@ const exampleBrewery = {
 };
 
 describe('Beer Routes', function(){
-  describe('POST :/api/brewery/:breweryID/note', function(){
-    describe('with a valid list id and note body', () => {
+  describe('POST :/api/brewery/:breweryID/beer', function(){
+    describe('with a valid list id and beer body', () => {
       before( done => {
         new Brewery(exampleBrewery).save()
         .then( brewery => {
@@ -46,7 +46,7 @@ describe('Beer Routes', function(){
       });
 
       it('should return a beer', done => {
-        request.post(`${url}/api/brewery/${this.tempBrewery_id}/beer`)
+        request.post(`${url}/api/brewery/${this.tempBrewery._id}/beer`)
         .send(exampleBeer)
         .end((err, res) => {
           if(err) return done(err);
