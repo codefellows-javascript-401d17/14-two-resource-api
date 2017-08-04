@@ -1,0 +1,36 @@
+{
+  "name": "13-mongodb",
+  "version": "1.0.0",
+  "description": "![CF](https://camo.githubusercontent.com/70edab54bba80edb7493cad3135e9606781cbb6b/687474703a2f2f692e696d6775722e636f6d2f377635415363382e706e67) 13: Single Resource Mongo and Express API ===",
+  "main": "server.js",
+  "scripts": {
+    "test": "DEBUG='airport*' node_modules/mocha/bin/mocha",
+    "start": "DEBUG='airport*' node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ctcrnitv/13-mongodb.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ctcrnitv/13-mongodb/issues"
+  },
+  "homepage": "https://github.com/ctcrnitv/13-mongodb#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
+    "debug": "^2.6.8",
+    "express": "^4.15.3",
+    "http-errors": "^1.6.1",
+    "mongoose": "^4.11.5",
+    "morgan": "^1.8.2"
+  },
+  "devDependencies": {
+    "chai": "^4.1.0",
+    "mocha": "^3.5.0",
+    "superagent": "^3.5.2"
+  }
+}
