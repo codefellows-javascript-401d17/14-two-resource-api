@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const createError = require('http-errors');
 const Album = require('./album.js')
-const debug = require(debug)('band:band');
+const debug = require('debug')('band:band');
 
 const bandSchema = Schema({
   name: {type: String, required: true},
