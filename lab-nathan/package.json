@@ -1,0 +1,29 @@
+{
+  "name": "lab-nathan",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test-win": "SET DEBUG=book* && mocha",
+    "test": "DEBUG='book*' mocha",
+    "start-win": "SET DEBUG=book* && node server.js",
+    "start": "DEBUG='book*' node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
+    "debug": "^2.6.8",
+    "express": "^4.15.3",
+    "http-errors": "^1.6.1",
+    "mongoose": "^4.11.5",
+    "morgan": "^1.8.2"
+  },
+  "devDependencies": {
+    "chai": "^4.1.0",
+    "mocha": "^3.5.0",
+    "superagent": "^3.5.2"
+  }
+}
