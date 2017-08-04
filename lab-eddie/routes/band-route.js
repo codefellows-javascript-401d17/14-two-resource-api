@@ -10,19 +10,21 @@ const bandRouter = module.exports = new Router();
 
 bandRouter.post('/api/band', jsonParser, function(req, res, next) {
   debug('POST: /api/band');
-  console.log('Works right here');
   
   new Band(req.body).save()
   .then( band => res.json(band))
   .catch(err => next(createError(400, err.message)));
 });
 
-bandRouter.get('api/band/:id', function(req, res, next) {
+bandRouter.get('/api/band/:id', function(req, res, next) {
   debug('GET: /api/band/:id');
 
   Band.findById(req.params.id)
   .populate('albums')
-  .then(band => res.json(band))
+  .populate('tracks')
+  .then(band => {
+    console.log(band);
+    res.json(band)})
   .catch(err => next(createError(404, err.message)));
 });
 

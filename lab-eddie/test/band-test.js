@@ -50,5 +50,52 @@ describe('Band Routes', function(){
         })
       })
     });
+    describe('with an invalid body', function() {
+      it('should return a 400 status code', () => {
+        request.post(`${url}/api/band`, err => {
+          expect(err.status).to.equal(400);
+          done(err);
+        });
+      });
+    });
+  });
+  describe('GET /api/band', function(){
+    describe('Should return a 200 status code and req.body', function() {
+      describe('with a valid req', function() {
+
+        before(done => {
+          new Band(modelBand).save()
+          .then( band => {
+            this.band = band;
+            return Band.findByIdAndAddAlbum(band._id, modelAlbum);
+          })
+          .then(album => {
+            this.album = album;
+            done()
+          })
+          .catch(done);
+        });
+
+        after(done => {
+          if(this.band) {
+            Band.remove({})
+            .then(() => done)
+            .catch(done);
+            return;
+          }
+          done();
+        });
+
+        it('Should return a 200 code and req body', done => {
+          request.get(`${url}/api/band/${this.band._id}`)
+          .end((err, res) => {
+            if(err) return done(err);
+            expect(res.status).to.equal(200);
+            expect(res.body._id).to.equal(this.band._id.toString());
+            done()
+          });
+        });
+      })
+    })
   });
 });
