@@ -14,7 +14,7 @@ const brewerySchema = Schema ({
   beers: [{type: Schema.Types.ObjectId, ref: 'beer'}]
 });
 
-const Brewery = module.exports = mongoose.model('beer', brewerySchema);
+const Brewery = module.exports = mongoose.model('brewery', brewerySchema);
 
 Brewery.findByIdAndAddBeer = function(id, beer){
   debug('findByIdAndAddBeer');
@@ -22,7 +22,7 @@ Brewery.findByIdAndAddBeer = function(id, beer){
   return Brewery.findById(id)
   .catch( err => Promise.reject(createError(404, err.message)))
   .then( brewery => {
-    beer.breweryID = brewery._ID;
+    beer.breweryID = brewery._id;
     this.tempBrewery = brewery;
     return new Beer(beer).save();
   })

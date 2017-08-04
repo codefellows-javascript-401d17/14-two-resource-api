@@ -3,7 +3,7 @@
 const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
 const debug = require('debug')('brewery:beer router');
-const Brewery = require('../model/brewery.');
+const Brewery = require('../model/brewery.js');
 
 const beerRouter = module.exports = new Router();
 

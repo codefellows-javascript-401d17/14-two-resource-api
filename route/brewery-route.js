@@ -19,6 +19,7 @@ breweryRouter.get('/api/brewery/:id', function(req, res, next){
   debug('GET: /api/brewery');
 
   Brewery.findById(req.params.id)
+  .populate('beers')
   .then( brewery => res.json(brewery))
   .catch(next);
 });

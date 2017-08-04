@@ -21,6 +21,7 @@ const exampleBrewery = {
   name: 'the brewery name',
   address: 'the address',
   phoneNumber: '555-555-5555',
+  timestamp: new Date()
 };
 
 describe('Beer Routes', function(){
