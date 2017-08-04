@@ -80,7 +80,7 @@ describe('Brewery Routes', function() {
         new Brewery(exampleBrewery).save()
         .then( brewery => {
           this.tempBrewery = brewery;
-          return Beer.findByIdAndAddBeer(brewery._id, exampleBeer);
+          return Brewery.findByIdAndAddBeer(brewery._id, exampleBeer);
         })
         .then( beer => {
           this.tempBeer = beer;
@@ -148,7 +148,6 @@ describe('Brewery Routes', function() {
       done();
     });
     it('should respond with a 200 status code and an updated brewery object.', () => {
-      console.log(this.tempBrewery._id);
       return request.put(`${url}/api/brewery/${this.tempBrewery._id}`)
       .send(newBrewery)
       .then(res => {
