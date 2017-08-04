@@ -1,23 +1,11 @@
 {
-  "name": "13-mongodb",
+  "name": "14-two-resource-api",
   "version": "1.0.0",
   "description": "![CF](https://camo.githubusercontent.com/70edab54bba80edb7493cad3135e9606781cbb6b/687474703a2f2f692e696d6775722e636f6d2f377635415363382e706e67) 13: Single Resource Mongo and Express API ===",
   "main": "server.js",
-  "scripts": {
-    "test": "DEBUG='movie*' mocha",
-    "start": "DEBUG='movie*' node server.js"
+  "directories": {
+    "test": "test"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/andyfiveeleven/13-mongodb.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/andyfiveeleven/13-mongodb/issues"
-  },
-  "homepage": "https://github.com/andyfiveeleven/13-mongodb#readme",
   "dependencies": {
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
@@ -31,5 +19,20 @@
     "chai": "^4.1.0",
     "mocha": "^3.5.0",
     "superagent": "^3.5.2"
-  }
+  },
+  "scripts": {
+    "test": "DEBUG='movie*' mocha",
+    "start": "DEBUG='movie*' node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andyfiveeleven/14-two-resource-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andyfiveeleven/14-two-resource-api/issues"
+  },
+  "homepage": "https://github.com/andyfiveeleven/14-two-resource-api#readme"
 }

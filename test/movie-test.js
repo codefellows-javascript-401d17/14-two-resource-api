@@ -3,6 +3,7 @@
 const expect = require('chai').expect;
 const request = require('superagent');
 const Movie = require('../model/movie.js');
+const Actor = require('../model/actor.js');
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 
@@ -11,7 +12,13 @@ require('../server.js');
 
 const url = `http://localhost:${PORT}`;
 const exampleMovie = {
-  name: 'test movie name'
+  name: 'test movie name',
+  dateReleased: new Date()
+};
+
+const exampleActor = {
+  name: 'Nickypoo',
+  age: 25
 };
 
 describe('Movie Routes', function(){
@@ -22,7 +29,6 @@ describe('Movie Routes', function(){
           Movie.remove({})
           .then( () => done())
           .catch(done);
-          console.log('finished valid req body')
           return;
         }
         done();
@@ -45,17 +51,19 @@ describe('Movie Routes', function(){
   describe('GET: /api/movie/:id', function(){
     describe('with a valid body', function() {
       before(done => {
-        exampleMovie.dateReleased = new Date();
         new Movie(exampleMovie).save()
         .then( movie => {
           this.tempMovie = movie;
+          return Movie.findByIdAndAddActor(movie._id, exampleActor);
+        })
+        .then( actor => {
+          this.tempActor = actor;
           done();
         })
         .catch(done);
       });
 
       after(done => {
-        delete exampleMovie.dateReleased;
         if(this.tempMovie) {
           Movie.remove({})
           .then( () => done())
@@ -71,6 +79,8 @@ describe('Movie Routes', function(){
           if(err) return done(err);
           expect(res.status).to.equal(200);
           expect(res.body.name).to.equal('test movie name');
+          expect(res.body.actors.length).to.equal(1);
+          expect(res.body.actors[0].name).to.equal(exampleActor.name);
           done();
         });
       });
@@ -80,7 +90,6 @@ describe('Movie Routes', function(){
   describe('PUT: /api/movie', function(){
     describe('with a valid body', function(){
       before(done => {
-        exampleMovie.dateReleased = new Date();
         new Movie(exampleMovie).save()
         .then( movie => {
           this.tempMovie = movie;
@@ -90,21 +99,23 @@ describe('Movie Routes', function(){
       });
 
       after(done => {
-        delete exampleMovie.dateReleased;
         if(this.tempMovie) {
           Movie.remove({})
           .then( () => done())
           .catch(done);
-          return;
         }
-        done();
       });
 
       it('should return a 200 and update the movie', done =>{
+        var updated = { name: 'updated name'};
+
         request.put(`${url}/api/movie/${this.tempMovie._id}`)
-        .send({name:'a new movie'})
+        .send(updated)
         .end((err, res) => {
+          if(err) return done(err);
+          let dateReleased = new Date(res.body.dateReleased);
           expect(res.status).to.equal(200);
+          expect(res.body.name).to.equal(updated.name);
           done();
         });
       });
