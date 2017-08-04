@@ -17,8 +17,6 @@ const exampleBeer = {
   ibu: '45'
 };
 
-let tempBrewery;
-
 const exampleNewBeer = {
   name: 'new test beer',
   style: 'new test style',
@@ -148,34 +146,23 @@ describe('Beer Routes', function(){
           done();
         });
       });
-    });
-    it('should return 400 bad request', done => {
-      return request.post(`${url}/api/brewery`)
-      .send(exampleBrewery)
-      .then(brewery => {
-        this.tempBrewery = brewery;
-        return Brewery.findByIdAndAddBeer(brewery._id, exampleBeer);
-      })
-      .then(beer => {
-        this.tempBeer = beer;
-        done();
-      })
-      .then(()=>{
-        request.put(`${url}/api/brewery/${this.tempBrewery._id}/beer/${this.tempBeer._id}`)
-        .send(null);
-      })
-      .catch(err => {
-        expect(err.status).to.equal(400);
-        done();
-      });
-    });
 
-    it('should return 404 not found', done => {
-      request.put(`${url}/api/brewery/${this.tempBrewery._id}/beer/12345`)
-      .send(null)
-      .end((err, res) => {
-        expect(res.status).to.equal(404);
-        done();
+      it('should return 400 bad request', done => {
+        request.put(`${url}/api/brewery/${this.tempBrewery._id}/beer/${this.tempBeer._id}`)
+        .send(null)
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          done();
+        });
+      });
+
+      it('should return 404 not found', done => {
+        request.put(`${url}/api/brewery/${this.tempBrewery._id}/beer/12345`)
+        .send(null)
+        .end((err, res) => {
+          expect(res.status).to.equal(404);
+          done();
+        });
       });
     });
   });
