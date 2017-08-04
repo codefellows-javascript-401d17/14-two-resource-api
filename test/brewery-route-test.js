@@ -3,7 +3,6 @@
 const expect = require('chai').expect;
 const request = require('superagent');
 const Brewery = require('../model/brewery.js');
-const Beer = require('../model/beer.js');
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 
