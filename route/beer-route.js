@@ -24,8 +24,18 @@ beerRouter.get('/api/brewery/:breweryID/beer/:id', function(req, res, next){
   .catch(next);
 });
 
-beerRouter.put('/api/brewery/:breweryID/beer/:id', function(req, res, next){
+beerRouter.put('/api/brewery/:breweryID/beer/:id',jsonParser , function(req, res, next){
   debug('PUT: /api/brewery/:breweryID/beer/:id');
+
+  if(Object.keys(req.body).length === 0) {
+    Beer.findById(req.params.id)
+    .then(beer => {
+      res.status(400);
+      res.json(beer);
+    })
+    .catch(next);
+    return;
+  }
 
   Beer.findByIdAndUpdate(req.params.id, req.body, {new: true} )
   .then(beer => res.json(beer))
