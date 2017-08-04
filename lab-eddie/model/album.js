@@ -8,7 +8,7 @@ const albumSchema = Schema({
   title: {type: String, required: true},
   genre: {type: String, required: true},
   datePublished: {type: Date, required: true},
-  albumID: {type: Object.Types.ObjectId, required: true},
+  bandID: {type: Object.Types.ObjectId, required: true},
   tracks: [{type: Scheme.Types.ObjectId, ref: 'song'}]
 });
 
