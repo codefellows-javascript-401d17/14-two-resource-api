@@ -16,10 +16,10 @@ const bandRouter = require('./routes/band-route.js');
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI, {useMongoClient: true});
 
-// app.use(cors());
-// app.use(debug('dev'));
-// app.use(bandRouter);
-// app.use(error);
+app.use(cors());
+app.use(morgan('dev'));
+app.use(bandRouter);
+app.use(error);
 
 app.listen(PORT, () => {
   debug('Server active on port: ', PORT);

@@ -10,7 +10,8 @@ const bandRouter = module.exports = new Router();
 
 bandRouter.post('/api/band', jsonParser, function(req, res, next) {
   debug('POST: /api/band');
-
+  console.log('Works right here');
+  
   new Band(req.body).save()
   .then( band => res.json(band))
   .catch(err => next(createError(400, err.message)));
