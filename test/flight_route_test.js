@@ -106,7 +106,7 @@ describe('Flight Router', function () {
         request.put(`${url}/api/airport/${this.tempAirport._id}/flight/${this.tempFlight._id}`)
           .send(updateFlightBody)
           .end((err, rsp) => {
-            if (err) console.log(err);
+            if (err) done(err);
             expect(rsp.status).to.equal(200);
             done();
           })
@@ -133,7 +133,7 @@ describe('Flight Router', function () {
       it('deletes the flight document', (done) => {
         request.delete(`${url}/api/airport/${this.tempAirport._id}/flight/${this.tempFlight._id}`)
           .end((err, rsp) => {
-            if (err) console.log('FROM TEST ', err);
+            if (err) done(err);
             expect(rsp.status).to.equal(204);
             done()
           })

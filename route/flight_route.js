@@ -16,8 +16,7 @@ flightRouter.get('/api/airport/:airportID/flight', function (req, rsp, next) {
   Airport.findById(req.params.airportID)
     .populate('flight')
     .exec(function (err, something) {
-      if (err) console.log(err);
-      console.log('****************', something);
+      if (err) done(err);
     })
 });
 
@@ -30,12 +29,11 @@ flightRouter.put('/api/airport/:airportID/flight/:flightID', jsonParser, functio
 })
 
 flightRouter.delete('/api/airport/:airportID/flight/:flightID', function (req, rsp, next) {
-  console.log('PARAMS *** PARAMS *** PARAMS', req.params);
   Airport.findByIdAndRemove(req.params.airportID, req.params.flightID)
     .then(() => {
       rsp.sendStatus(204);
     })
-    .catch(err => {
-      // console.log(err)
+    .catch((err) => {
+      done(err);
     })
 });
