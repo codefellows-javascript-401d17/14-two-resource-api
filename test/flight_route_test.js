@@ -74,4 +74,43 @@ describe('Flight Router', function () {
       })
     })
   })
+  describe('PUT /api/airport/:airportID/flight/:flightID', function () {
+    describe('provided proper airportID, flightID, and flightBody', function () {
+      before((done) => {
+        Airport.create(exampleAirportBody)
+          .then((airport) => {
+            this.tempAirport = airport;
+
+            return Airport.findByIdAndAdd(this.tempAirport._id, exampleFlightBody);
+          })
+          .then((flight) => {
+            this.tempFlight = flight;
+            done();
+          })
+          .catch((err) => {
+            done(err);
+          })
+      })
+      after((done) => {
+        Promise.all([
+          Airport.remove({}),
+          Flight.remove({})
+        ])
+          .then(() => {
+            done();
+          })
+          .catch(done);
+      })
+      it('responds with updated flight', (done) => {
+        const updateFlightBody = { destination: 'Khazakhstan', flightNumber: '12346423' };
+        request.put(`${url}/api/airport/${this.tempAirport._id}/flight/${this.tempFlight._id}`)
+          .send(updateFlightBody)
+          .end((err, rsp) => {
+            if (err) console.log(err);
+            expect(rsp.status).to.equal(200);
+            done()
+          })
+      })
+    })
+  })
 })

@@ -16,8 +16,15 @@ flightRouter.get('/api/airport/:airportID/flight', function (req, rsp, next) {
   Airport.findById(req.params.airportID)
     .populate('flight')
     .exec(function (err, something) {
-      if(err) console.log(err);
+      if (err) console.log(err);
       console.log('****************', something);
     })
 });
 
+flightRouter.put('/api/airport/:airportID/flight/:flightID', jsonParser, function (req, rsp, next) {
+  Airport.findByIdAndUpdate(req.params.airportID, req.body)
+    .then((flight) => {
+      return rsp.json(flight);
+    })
+    .catch(next);
+})
