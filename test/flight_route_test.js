@@ -33,7 +33,7 @@ describe('Flight Router', function () {
         request.post(`${url}/api/airport/${this.tempAirport._id}/flight`)
           .send(exampleFlightBody)
           .end((err, rsp) => {
-            if (err) console.log(err);
+            if (err) done(err);
             expect(rsp.status).to.equal(200);
             expect(rsp.body.destination).to.equal(exampleFlightBody.destination);
             expect(rsp.body.airportID).to.equal(this.tempAirport._id.toString());
@@ -67,7 +67,7 @@ describe('Flight Router', function () {
         request.get(`${url}/api/airport/${this.tempAirport._id}`)
           .send(exampleFlightBody)
           .end((err, rsp) => {
-            if (err) console.log(err.message);
+            if (err) done(err);
             expect(rsp.status).to.equal(200);
             done();
           })
@@ -108,6 +108,33 @@ describe('Flight Router', function () {
           .end((err, rsp) => {
             if (err) console.log(err);
             expect(rsp.status).to.equal(200);
+            done();
+          })
+      })
+    })
+  })
+  describe('DELETE /api/airport/:airportID/flight/:flightID', function () {
+    describe('when provided with id', function () {
+      before((done) => {
+        Airport.create(exampleAirportBody)
+          .then((airport) => {
+            this.tempAirport = airport;
+
+            return Airport.findByIdAndAdd(this.tempAirport._id, exampleFlightBody);
+          })
+          .then((flight) => {
+            this.tempFlight = flight;
+            done();
+          })
+          .catch((err) => {
+            done(err);
+          })
+      })
+      it('deletes the flight document', (done) => {
+        request.delete(`${url}/api/airport/${this.tempAirport._id}/flight/${this.tempFlight._id}`)
+          .end((err, rsp) => {
+            if (err) console.log('FROM TEST ', err);
+            expect(rsp.status).to.equal(204);
             done()
           })
       })

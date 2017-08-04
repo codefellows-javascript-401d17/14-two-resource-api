@@ -28,3 +28,14 @@ flightRouter.put('/api/airport/:airportID/flight/:flightID', jsonParser, functio
     })
     .catch(next);
 })
+
+flightRouter.delete('/api/airport/:airportID/flight/:flightID', function (req, rsp, next) {
+  console.log('PARAMS *** PARAMS *** PARAMS', req.params);
+  Airport.findByIdAndRemove(req.params.airportID, req.params.flightID)
+    .then(() => {
+      rsp.sendStatus(204);
+    })
+    .catch(err => {
+      // console.log(err)
+    })
+});
