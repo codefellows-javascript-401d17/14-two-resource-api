@@ -5,6 +5,7 @@ const jsonParser = require('body-parser').json();
 const debug = require('debug')('song:band-route');
 const createError = require('http-errors');
 const Band = require('../model/band.js');
+
 const bandRouter = module.exports = new Router();
 
 bandRouter.post('/api/band', jsonParser, function(req, res, next) {
@@ -19,6 +20,7 @@ bandRouter.get('/api/band/:id', function(req, res, next) {
   debug('GET: /api/band/:id');
 
   Band.findById(req.params.id)
+  .populate('songs')
   .then( band => res.json(band))
   .catch( err => next(createError(404, err.message)));
 });
@@ -26,17 +28,20 @@ bandRouter.get('/api/band/:id', function(req, res, next) {
 bandRouter.put('/api/band/:id', jsonParser, function(req, res, next) {
   debug('PUT: /api/band/:id');
 
-  if(!req.body.name) return next(createError(400, 'bad request'));
+  if(!req.body.name) return next(createError(400, res.message));
 
   Band.findByIdAndUpdate(req.params.id, req.body, { 'new': true })
-  .then( band => res.json(band))
-  .catch(err => next(createError(404, err.message)));
+  .then(band => res.json(band))
+  .catch(err => {
+    if(err.name === 'ValidationError') return next(err);
+    next(createError(404, err.message));
+  });
 });
 
 bandRouter.delete('/api/band/:id', function(req, res, next) {
   debug('DELETE: /api/band/:id');
 
-  Band.findByIdAndDelete(req.params.id)
-  .then( () => res.status(204))
-  .catch(err => next(err));
+  Band.findByIdAndRemove(req.params.id)
+  .then( () => res.status(204).send())
+  .catch(err => next(createError(404, err.message)));
 });

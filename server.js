@@ -7,7 +7,8 @@ const Promise = require('bluebird');
 const mongoose = require('mongoose');
 const debug = require('debug')('song:server');
 
-const bandRouter = require('./route/band-route');
+const bandRouter = require('./route/band-route.js');
+const songRouter = require('./route/song-route.js');
 const errors = require('./lib/error-middleware.js');
 
 const app = express();
@@ -20,6 +21,7 @@ mongoose.connect(MONGODB_URI);
 app.use(cors());
 app.use(morgan('dev'));
 app.use(bandRouter);
+app.use(songRouter);
 app.use(errors);
 
 app.listen(PORT, () => {
