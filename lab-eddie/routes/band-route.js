@@ -26,5 +26,21 @@ bandRouter.get('api/band/:id', function(req, res, next) {
 });
 
 bandRouter.put('api/band/:id', jsonParser, function(req, res, next){
-  
+  debug('PUT: /band/api/:id');
+
+  Band.findByIdAndUpdate(req.params.id, req.body, {new: true})
+  .then(band => res.json(band))
+  .catch(err => {
+    if (err.name === 'ValidationError') return next(err);
+    next(createError(404, err.message));
+  })
+
+});
+
+bandRouter.delete('api/band/:id', function(req, res, err){
+  debug('DELETE: api/band/:id');
+
+  Band.findByIdAndRemove(req.params.id)
+  .then(() => res.status(204).send())
+  .catch(err => next(createError(404, err.message)));
 });
