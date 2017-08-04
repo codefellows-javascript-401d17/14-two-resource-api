@@ -80,7 +80,7 @@ describe('Brewery Routes', function() {
         new Brewery(exampleBrewery).save()
         .then( brewery => {
           this.tempBrewery = brewery;
-          return Beer.findByIdAndAddBeer(brewery._id, exampleBeer);
+          return Brewery.findByIdAndAddBeer(brewery._id, exampleBeer);
         })
         .then( beer => {
           this.tempBeer = beer;
