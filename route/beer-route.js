@@ -24,7 +24,7 @@ beerRouter.get('/api/brewery/:breweryID/beer/:id', function(req, res, next){
   .catch(next);
 });
 
-beerRouter.put('/api/brewery/:breweryID/beer/:id', function(req, res, next){
+beerRouter.put('/api/brewery/:breweryID/beer/:id',jsonParser , function(req, res, next){
   debug('PUT: /api/brewery/:breweryID/beer/:id');
 
   Beer.findByIdAndUpdate(req.params.id, req.body, {new: true} )
