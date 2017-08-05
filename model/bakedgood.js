@@ -7,7 +7,7 @@ const bakedGoodSchema = Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
   calories: { type: Number, required: true },
-  bakeryID: { type: Schema.Types.ObjectId, required: true }
+  bakeryID: { type: Schema.Types.ObjectId }
 });
 
 module.exports = mongoose.model('bakedGood', bakedGoodSchema);
