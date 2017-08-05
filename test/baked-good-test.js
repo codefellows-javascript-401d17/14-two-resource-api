@@ -61,7 +61,6 @@ describe('Baked Good Routes', function() {
       before( done => {
         new BakedGood(exampleBakedGood).save()
         .then( bakedGood => {
-          console.log(bakedGood);
           this.tempBakedGood = bakedGood;
           done();
         })
@@ -83,6 +82,43 @@ describe('Baked Good Routes', function() {
         .end((err, res) => {
           if (err) return done(err);
           expect(res.status).to.equal(200);
+          done();
+        });
+      });
+    });
+  });
+
+  describe('PUT: /api/bakedgood/:bakedgoodID', function() {
+    describe('with a valid bakedgood', function() {
+
+      before( done => {
+        new BakedGood(exampleBakedGood).save()
+        .then( bakedgood => {
+          this.tempBakedGood = bakedgood;
+          done();
+        })
+        .catch(done);
+      });
+
+      after( done => {
+        if (this.tempBakedGood) {
+          BakedGood.remove()
+          .then( () => done())
+          .catch(done);
+          return;
+        }
+        done();
+      });
+
+      it('should return an updated baked good', done => {
+        let updated = { name: 'New and Improved Name' };
+
+        request.put(`${url}/api/bakedgood/${this.tempBakedGood._id}`)
+        .send(updated)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(200);
+          expect(res.body.name).to.equal(updated.name);
           done();
         });
       });
