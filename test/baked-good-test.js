@@ -107,6 +107,7 @@ describe('Baked Good Routes', function() {
           .catch(done);
           return;
         }
+
         done();
       });
 
@@ -119,6 +120,39 @@ describe('Baked Good Routes', function() {
           if (err) return done(err);
           expect(res.status).to.equal(200);
           expect(res.body.name).to.equal(updated.name);
+          done();
+        });
+      });
+    });
+  });
+
+  describe('DELETE: /api/bakedgood/:bakedgoodID', function() {
+    describe('with a valid id', function() {
+      before( done => {
+        new BakedGood(exampleBakedGood).save()
+        .then( bakedgood => {
+          this.tempBakedGood = bakedgood;
+          done();
+        })
+        .catch(done);
+      });
+
+      after( done => {
+        if (this.tempBakedGood) {
+          BakedGood.remove()
+          .then( () => done())
+          .catch(done);
+          return;
+        }
+        
+        done();
+      });
+
+      it('should delete a baked good', done => {
+        request.delete(`${url}/api/bakedgood/${this.tempBakedGood._id}`)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(204);
           done();
         });
       });

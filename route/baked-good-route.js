@@ -35,3 +35,11 @@ bakedGoodRouter.put('/api/bakedgood/:bakedgoodID', jsonParser, function(req, res
   .catch( err => {next(createError(404, err.message));
   });
 });
+
+bakedGoodRouter.delete('/api/bakedgood/:bakedgoodID', function(req, res, next) {
+  debug('DELETE: /api/bakedgood/:bakedgoodID');
+
+  BakedGood.findByIdAndRemove(req.params.id)
+  .then( () => res.status(204).send())
+  .catch( err => next(createError(404, err.message)));
+});
