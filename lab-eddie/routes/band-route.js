@@ -10,7 +10,7 @@ const bandRouter = module.exports = new Router();
 
 bandRouter.post('/api/band', jsonParser, function(req, res, next) {
   debug('POST: /api/band');
-  
+
   new Band(req.body).save()
   .then( band => res.json(band))
   .catch(err => next(createError(400, err.message)));
@@ -22,8 +22,7 @@ bandRouter.get('/api/band/:id', function(req, res, next) {
   Band.findById(req.params.id)
   .populate('albums')
   .populate('tracks')
-  .then(band => {
-    res.json(band)})
+  .then(band => res.json(band))
   .catch(err => next(createError(404, err.message)));
 });
 
@@ -37,11 +36,11 @@ bandRouter.put('/api/band/:id', jsonParser, function(req, res, next){
   .catch(err => {
     if (err.name === 'ValidationError') return next(err);
     next(createError(404, err.message));
-  })
+  });
 
 });
 
-bandRouter.delete('api/band/:id', function(req, res, err){
+bandRouter.delete('api/band/:id', function(req, res, next){
   debug('DELETE: api/band/:id');
 
   Band.findByIdAndRemove(req.params.id)

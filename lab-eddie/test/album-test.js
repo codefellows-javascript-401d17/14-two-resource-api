@@ -16,13 +16,13 @@ const modelBand = {
   name: 'Led Zeppelin',
   genre: 'Rock',
   homeTown: 'London',
-}
+};
 
 const modelAlbum = {
   title: 'Led Zeppelin IV',
   genre: 'Rock',
   datePublished: new Date('11 8 1971')
-}
+};
 
 describe('Album Routes', function() {
   describe('POST /api/band/:id/album', function() {
@@ -31,7 +31,7 @@ describe('Album Routes', function() {
         new Band(modelBand).save()
         .then(band => {
           this.band = band;
-          done()
+          done();
         })
         .catch(done);
       });
@@ -43,7 +43,7 @@ describe('Album Routes', function() {
         ])
         .then(() => done())
         .catch(done);
-      })
+      });
 
       it('should return a 200 code and a req.body', done => {
         console.log(`${url}/band/${this.band._id}/album`);
@@ -57,15 +57,15 @@ describe('Album Routes', function() {
           expect(new Date(res.body.datePublished).toString())
           .to.equal(modelAlbum.datePublished.toString());
           done();
-        })
-      })
+        });
+      });
     });
     describe('with an invalid band id', () => {
       before(done => {
         new Band(modelBand).save()
         .then(band => {
           this.band = band;
-          done()
+          done();
         })
         .catch(done);
       });
@@ -77,16 +77,16 @@ describe('Album Routes', function() {
         ])
         .then(() => done())
         .catch(done);
-      })
+      });
 
       it('should return a 404 error code', done => {
         request.post(`${url}/band/666/album`)
         .send(modelAlbum)
-        .end((err, res) => {
+        .end((err) => {
           expect(err.status).to.equal(404);
           done();
-        })
-      })
+        });
+      });
     });
 
     describe('with an invalid body', () => {
@@ -94,7 +94,7 @@ describe('Album Routes', function() {
         new Band(modelBand).save()
         .then(band => {
           this.band = band;
-          done()
+          done();
         })
         .catch(done);
       });
@@ -106,16 +106,16 @@ describe('Album Routes', function() {
         ])
         .then(() => done())
         .catch(done);
-      })
+      });
 
       it('should return a 404 error code', done => {
         request.post(`${url}/band/${this.band._id}/album`)
         .send(modelBand)
-        .end((err, res) => {
+        .end((err) => {
           expect(err.status).to.equal(400);
           done();
-        })
-      })
+        });
+      });
     });
 
   });
@@ -140,15 +140,15 @@ describe('Album Routes', function() {
         ])
         .then(() => done())
         .catch(done);
-      })
+      });
 
       it('Should return a 200 code and a req body', done => {
         request.get(`${url}/band/${this.band._id}/album/${this.album._id}`)
         .end((err, res) => {
           if(err) return done(err);
           expect(res.status).to.equal(200);
-          expect(res.body.name).to.equal(this.album.name)
-          expect(res.body._id).to.equal(this.album._id.toString())
+          expect(res.body.name).to.equal(this.album.name);
+          expect(res.body._id).to.equal(this.album._id.toString());
           expect(res.body.bandID).to.equal(this.band._id.toString());
           done();
         });
@@ -173,7 +173,7 @@ describe('Album Routes', function() {
         ])
         .then(() => done())
         .catch(done);
-      })
+      });
 
       it('Should return a 404 code', done => {
         request.get(`${url}/band/${this.band._id}/album/666`)
@@ -205,7 +205,7 @@ describe('Album Routes', function() {
         ])
         .then(() => done())
         .catch(done);
-      })
+      });
 
       it('Should return a 200 code and a req body', done => {
         request.put(`${url}/band/${this.band._id}/album/${this.album._id}`)

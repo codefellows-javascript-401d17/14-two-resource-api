@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const createError = require('http-errors');
-const Album = require('./album.js')
+const Album = require('./album.js');
 const debug = require('debug')('band:band');
 
 const bandSchema = Schema({
@@ -32,4 +32,4 @@ Band.findByIdAndAddAlbum = function(id, album) {
   })
   .then(() => this.tempAlbum);
 
-}
+};

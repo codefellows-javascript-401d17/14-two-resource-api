@@ -25,4 +25,4 @@ app.use(error);
 
 app.listen(PORT, () => {
   debug('Server active on port: ', PORT);
-})
+});
