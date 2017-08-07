@@ -12,6 +12,7 @@ const app = express();
 const MONGODB_URI = 'mongodb://localhost/bands';
 const error = require('./middleware/errors.js');
 const bandRouter = require('./routes/band-route.js');
+const albumRouter = require('./routes/album-route.js');
 
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI, {useMongoClient: true});
@@ -19,6 +20,7 @@ mongoose.connect(MONGODB_URI, {useMongoClient: true});
 app.use(cors());
 app.use(morgan('dev'));
 app.use(bandRouter);
+app.use(albumRouter);
 app.use(error);
 
 app.listen(PORT, () => {

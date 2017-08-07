@@ -51,10 +51,10 @@ describe('Band Routes', function(){
       })
     });
     describe('with an invalid body', function() {
-      it('should return a 400 status code', () => {
+      it('should return a 400 status code', done => {
         request.post(`${url}/api/band`, err => {
           expect(err.status).to.equal(400);
-          done(err);
+          done();
         });
       });
     });

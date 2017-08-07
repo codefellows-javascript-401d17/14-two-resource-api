@@ -1,6 +1,6 @@
 'use strict';
 
-const Router = reuqire('express').Router;
+const Router = require('express').Router;
 const debug = require('debug')('band:album-route');
 const jsonParser = require('body-parser').json();
 const createError = require('http-errors');
@@ -10,11 +10,13 @@ const Band = require('../model/band.js');
 const albumRouter = module.exports = new Router();
 
 albumRouter.post('/api/band/:id/album', jsonParser, function(req, res, next){
-  debug('PUT //api/band/:id/album');
+  debug('PUT /api/band/:id/album');
+  console.log('ID request XXXXXXXX: ', req.params.id);
+  console.log('Bod req YYYYYYYYYY', req.body);
 
   Band.findByIdAndAddAlbum(req.params.id, req.body)
   .then(album => res.json(album))
-  .catch(err => next(createError(400, err.message)));
+  .catch(err => next(createError(404, err.message)));
 });
 
 albumRouter.get('/api/band/:id/album/:albumId', function(req, res, next){
