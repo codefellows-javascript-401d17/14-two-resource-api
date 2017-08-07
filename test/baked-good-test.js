@@ -1,0 +1,239 @@
+'use strict';
+
+const expect = require('chai').expect;
+const request = require('superagent');
+const Bakery = require('../model/bakery.js');
+const BakedGood = require('../model/bakedgood.js');
+
+const PORT = process.env.PORT || 3000;
+
+require('../server.js');
+
+const url = `http://localhost:${PORT}`;
+
+const exampleBakedGood = {
+  name: 'test: baked good',
+  description: 'test: really delicious',
+  calories: 500
+};
+
+const exampleBakery = {
+  name: 'test: bakery',
+  timestamp: new Date()
+};
+
+describe('Baked Good Routes', function() {
+  describe('POST: /api/bakery/:bakeryID/bakedgood', function() {
+    describe('with a valid bakery id and bakedgood body', () => {
+      before( done => {
+        new Bakery(exampleBakery).save()
+        .then( bakery => {
+          this.tempBakery = bakery;
+          done();
+        })
+        .catch(done);
+      });
+
+      after( done => {
+        Promise.all([
+          Bakery.remove({}),
+          BakedGood.remove({})
+        ])
+        .then( () => done())
+        .catch(done);
+      });
+
+      it('should return a bakedgood', done => {
+        request.post(`${url}/api/bakery/${this.tempBakery._id}/bakedgood`)
+        .send(exampleBakedGood)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.body.name).to.equal(exampleBakedGood.name);
+          expect(res.body.bakeryID).to.equal(this.tempBakery._id.toString());
+          done();
+        });
+      });
+    });
+
+    describe('with an invalid body', function() {
+      before( done => {
+        new Bakery(exampleBakery).save()
+        .then( bakery => {
+          this.tempBakery = bakery;
+          done();
+        })
+        .catch(done);
+      });
+
+      after( done => {
+        Promise.all([
+          Bakery.remove({}),
+          BakedGood.remove({})
+        ])
+        .then( () => done())
+        .catch(done);
+      });
+
+      it('should return a 400', done => {
+        request.post(`${url}/api/bakery/${this.tempBakery._id}/bakedgood`)
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          done();
+        });
+      });
+    });
+  });
+
+  describe('GET: /api/bakedgood/:id', function() {
+    describe('with a valid id', function() {
+      beforeEach( done => {
+        new BakedGood(exampleBakedGood).save()
+        .then( bakedGood => {
+          this.tempBakedGood = bakedGood;
+          done();
+        })
+        .catch(done);
+      });
+
+      afterEach( done => {
+        if (this.tempBakedGood) {
+          BakedGood.remove({})
+          .then( () => done())
+          .catch(done);
+          return;
+        }
+        done();
+      });
+
+      it('should return a valid baked good', done => {
+        request.get(`${url}/api/bakedgood/${this.tempBakedGood._id}`)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(200);
+          done();
+        });
+      });
+
+      it('shoudl return a 404', done => {
+        request.get(`${url}/api/bakedgood/12345`)
+        .end((err, res) => {
+          expect(res.status).to.equal(404);
+          done();
+        });
+      });
+    });
+  });
+
+  describe('PUT: /api/bakedgood/:bakedgoodID', function() {
+    describe('with a valid bakedgood', function() {
+
+      beforeEach( done => {
+        new BakedGood(exampleBakedGood).save()
+        .then( bakedgood => {
+          this.tempBakedGood = bakedgood;
+          done();
+        })
+        .catch(done);
+      });
+
+      afterEach( done => {
+        if (this.tempBakedGood) {
+          BakedGood.remove()
+          .then( () => done())
+          .catch(done);
+          return;
+        }
+
+        done();
+      });
+
+      it('should return an updated baked good', done => {
+        let updated = { name: 'New and Improved Name' };
+
+        request.put(`${url}/api/bakedgood/${this.tempBakedGood._id}`)
+        .send(updated)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(200);
+          expect(res.body.name).to.equal(updated.name);
+          done();
+        });
+      });
+
+      it('should return a 404', done => {
+        let updated = { name: '404 bakedgood'};
+
+        request.put(`${url}/api/bakedgood/12345`)
+        .send(updated)
+        .end((err, res) => {
+          expect(res.status).to.equal(404);
+          done();
+        });
+      });
+    });
+
+    describe('with an invalid body', function() {
+      beforeEach( done => {
+        new BakedGood(exampleBakedGood).save()
+        .then( bakedgood => {
+          this.tempBakedGood = bakedgood;
+          done();
+        })
+        .catch(done);
+      });
+
+      afterEach( done => {
+        if (this.tempBakedGood) {
+          BakedGood.remove()
+          .then( () => done())
+          .catch(done);
+          return;
+        }
+
+        done();
+      });
+
+      it('should return a 400', done => {
+        request.put(`${url}/api/bakery/${this.tempBakedGood._id}`)
+        .send()
+        .end((err, res) => {
+          expect(res.status).equal(400);
+          done();
+        });
+      });
+    });
+  });
+
+  describe('DELETE: /api/bakedgood/:bakedgoodID', function() {
+    describe('with a valid id', function() {
+      before( done => {
+        new BakedGood(exampleBakedGood).save()
+        .then( bakedgood => {
+          this.tempBakedGood = bakedgood;
+          done();
+        })
+        .catch(done);
+      });
+
+      after( done => {
+        if (this.tempBakedGood) {
+          BakedGood.remove()
+          .then( () => done())
+          .catch(done);
+          return;
+        }
+
+        done();
+      });
+
+      it('should delete a baked good', done => {
+        request.delete(`${url}/api/bakedgood/${this.tempBakedGood._id}`)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(204);
+          done();
+        });
+      });
+    });
+  });
+});
