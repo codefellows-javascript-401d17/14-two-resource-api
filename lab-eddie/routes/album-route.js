@@ -11,12 +11,12 @@ const albumRouter = module.exports = new Router();
 
 albumRouter.post('/api/band/:id/album', jsonParser, function(req, res, next){
   debug('PUT /api/band/:id/album');
-  console.log('ID request XXXXXXXX: ', req.params.id);
-  console.log('Bod req YYYYYYYYYY', req.body);
 
   Band.findByIdAndAddAlbum(req.params.id, req.body)
   .then(album => res.json(album))
-  .catch(err => next(createError(404, err.message)));
+  .catch(err => {
+    if (err.name === 'ValidationError') next(createError(400, err.message))
+    next(createError(404, err.message))});
 });
 
 albumRouter.get('/api/band/:id/album/:albumId', function(req, res, next){

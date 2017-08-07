@@ -79,7 +79,7 @@ describe('Album Routes', function() {
         .catch(done);
       })
 
-      it('should return a 200 code and a req.body', done => {
+      it('should return a 404 error code', done => {
         request.post(`${url}/band/666/album`)
         .send(modelAlbum)
         .end((err, res) => {
@@ -89,13 +89,165 @@ describe('Album Routes', function() {
       })
     });
 
+    describe('with an invalid body', () => {
+      before(done => {
+        new Band(modelBand).save()
+        .then(band => {
+          this.band = band;
+          done()
+        })
+        .catch(done);
+      });
+
+      after(done => {
+        Promise.all([
+          Band.remove({}),
+          Album.remove({})
+        ])
+        .then(() => done())
+        .catch(done);
+      })
+
+      it('should return a 404 error code', done => {
+        request.post(`${url}/band/${this.band._id}/album`)
+        .send(modelBand)
+        .end((err, res) => {
+          expect(err.status).to.equal(400);
+          done();
+        })
+      })
+    });
+
   });
 
   describe('GET /api/band/:id/album/:albumID', function() {
+    describe('With a valid band ID and album ID', function(){
+      before(done => {
+        new Band(modelBand).save()
+        .then(band => this.band = band)
+        .then(() => Band.findByIdAndAddAlbum(this.band._id, modelAlbum))
+        .then(album => {
+          this.album = album;
+          done();
+        })
+        .catch(done);
+      });
 
+      after(done => {
+        Promise.all([
+          Band.remove({}),
+          Album.remove({})
+        ])
+        .then(() => done())
+        .catch(done);
+      })
+
+      it('Should return a 200 code and a req body', done => {
+        request.get(`${url}/band/${this.band._id}/album/${this.album._id}`)
+        .end((err, res) => {
+          if(err) return done(err);
+          expect(res.status).to.equal(200);
+          expect(res.body.name).to.equal(this.album.name)
+          expect(res.body._id).to.equal(this.album._id.toString())
+          expect(res.body.bandID).to.equal(this.band._id.toString());
+          done();
+        });
+      });
+    });
+    describe('With a valid band ID and album ID', function(){
+      before(done => {
+        new Band(modelBand).save()
+        .then(band => this.band = band)
+        .then(() => Band.findByIdAndAddAlbum(this.band._id, modelAlbum))
+        .then(album => {
+          this.album = album;
+          done();
+        })
+        .catch(done);
+      });
+
+      after(done => {
+        Promise.all([
+          Band.remove({}),
+          Album.remove({})
+        ])
+        .then(() => done())
+        .catch(done);
+      })
+
+      it('Should return a 404 code', done => {
+        request.get(`${url}/band/${this.band._id}/album/666`)
+        .end((err) => {
+          expect(err.status).to.equal(404);
+          done();
+        });
+      });
+    });
   });
 
   describe('PUT /api/band/:id/album/:albumID', function() {
+    describe('With a valid band ID and album ID', function(){
+      before(done => {
+        new Band(modelBand).save()
+        .then(band => this.band = band)
+        .then(() => Band.findByIdAndAddAlbum(this.band._id, modelAlbum))
+        .then(album => {
+          this.album = album;
+          done();
+        })
+        .catch(done);
+      });
 
+      after(done => {
+        Promise.all([
+          Band.remove({}),
+          Album.remove({})
+        ])
+        .then(() => done())
+        .catch(done);
+      })
+
+      it('Should return a 200 code and a req body', done => {
+        request.get(`${url}/band/${this.band._id}/album/${this.album._id}`)
+        .end((err, res) => {
+          if(err) return done(err);
+          expect(res.status).to.equal(200);
+          expect(res.body.name).to.equal(this.album.name)
+          expect(res.body._id).to.equal(this.album._id.toString())
+          expect(res.body.bandID).to.equal(this.band._id.toString());
+          done();
+        });
+      });
+    });
+    describe('With a valid band ID and album ID', function(){
+      before(done => {
+        new Band(modelBand).save()
+        .then(band => this.band = band)
+        .then(() => Band.findByIdAndAddAlbum(this.band._id, modelAlbum))
+        .then(album => {
+          this.album = album;
+          done();
+        })
+        .catch(done);
+      });
+
+      after(done => {
+        Promise.all([
+          Band.remove({}),
+          Album.remove({})
+        ])
+        .then(() => done())
+        .catch(done);
+      })
+
+      it('Should return a 404 code', done => {
+        request.get(`${url}/band/${this.band._id}/album/666`)
+        .end((err) => {
+          expect(err.status).to.equal(404);
+          done();
+        });
+      });
+    });
   });
+
 });

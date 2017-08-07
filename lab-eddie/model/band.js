@@ -19,8 +19,9 @@ Band.findByIdAndAddAlbum = function(id, album) {
   debug('findByIdAndAddAlbum');
 
   return Band.findById(id)
-  .catch(err => Promise.rejecy(createError(400, err.message)))
+  .catch(err => Promise.reject(createError(400, err.message)))
   .then(band => {
+    console.log('THE ALBUM XXXXXXX: ', album);
     album.bandID = band._id;
     this.tempBand = band;
     return new Album(album).save();
