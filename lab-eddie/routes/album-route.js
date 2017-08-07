@@ -29,11 +29,14 @@ albumRouter.get('/api/band/:id/album/:albumId', function(req, res, next){
 
 albumRouter.put('/api/band/:id/album/:albumId', jsonParser, function(req, res, next){
   debug('PUT: /api/band/:id/album/:albumId');
-
-  Album.findByIdAndUpdate(req.params.albumId, req.body)
-  .then(album => res.json(album))
+  console.log('xxxxxxXXXXXXXXxxxxxx :', req.body)
+  Album.findByIdAndUpdate(req.params.albumId, req.body, {new: true})
+  .then(album => {
+    console.log(album)
+    res.json(album)
+  })
   .catch(err => {
-    if (err.name === 'ValidationError') return next(err);
+    if (err.name === 'ValidationError') next(createError(400, err.message))
     next(createError(404, err.message));
   });
 });
