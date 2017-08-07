@@ -24,11 +24,13 @@ bakeryRouter.get('/api/bakery/:id', function(req, res, next) {
   Bakery.findById(req.params.id)
   .populate('bakedGoods')
   .then( bakery => res.json(bakery))
-  .catch(next);
+  .catch(err => next(createError(404, err.message)));
 });
 
 bakeryRouter.put('/api/bakery/:id', jsonParser, function(req, res, next) {
   debug('PUT: /api/bakery/:id');
+
+  if (Object.keys(req.body).length === 0) return next(createError(400, 'Bad Request'));
 
   Bakery.findByIdAndUpdate(req.params.id, req.body, { new: true })
   .then( bakery => res.json(bakery))

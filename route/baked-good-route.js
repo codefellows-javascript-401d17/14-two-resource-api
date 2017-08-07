@@ -22,11 +22,13 @@ bakedGoodRouter.get('/api/bakedgood/:bakedgoodID', function(req, res, next) {
 
   BakedGood.findById(req.params.bakedgoodID)
   .then( bakedGood => res.json(bakedGood))
-  .catch(next);
+  .catch(err => next(createError(404, err.message)));
 });
 
 bakedGoodRouter.put('/api/bakedgood/:bakedgoodID', jsonParser, function(req, res, next) {
   debug('PUT: /api/bakedgood/:bakedgoodID');
+
+  if (Object.keys(req.body).length === 0) return next(createError(400, 'Bad Request'));
 
   BakedGood.findByIdAndUpdate(req.params.bakedgoodID, req.body, { new: true })
   .then( bakedgood =>

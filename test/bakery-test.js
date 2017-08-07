@@ -47,11 +47,32 @@ describe('Bakery Routes', function() {
         });
       });
     });
+
+    describe('with an invalid body', function() {
+      after( done => {
+        if ( this.tempBakery) {
+          Bakery.remove({})
+          .then( () => done())
+          .catch(done);
+          return;
+        }
+
+        done();
+      });
+
+      it('should return a 400', done => {
+        request.post(`${url}/api/bakery`)
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          done();
+        });
+      });
+    });
   });
 
   describe('GET: /api/bakery/:id', function() {
     describe('with a valid body', function() {
-      before( done => {
+      beforeEach( done => {
         new Bakery(exampleBakery).save()
         .then( (bakery) => {
           this.tempBakery = bakery;
@@ -64,7 +85,7 @@ describe('Bakery Routes', function() {
         .catch(done);
       });
 
-      after( done => {
+      afterEach( done => {
         if (this.tempBakery) {
           Bakery.remove({})
           .then( () => done())
@@ -83,13 +104,21 @@ describe('Bakery Routes', function() {
           done();
         });
       });
+
+      it('should return a 404', done => {
+        request.get(`${url}/api/bakery/12345`)
+        .end((err, res) => {
+          expect(res.status).to.equal(404);
+          done();
+        });
+      });
     });
   });
 
   describe('PUT: /api/bakery/:id', function() {
     describe('with a valid body', function() {
 
-      before( done => {
+      beforeEach( done => {
         new Bakery(exampleBakery).save()
         .then( bakery => {
           this.tempBakery = bakery;
@@ -98,7 +127,7 @@ describe('Bakery Routes', function() {
         .catch(done);
       });
 
-      after( done => {
+      afterEach( done => {
         if (this.tempBakery) {
           Bakery.remove({})
           .then( () => done())
@@ -115,6 +144,46 @@ describe('Bakery Routes', function() {
           if (err) return done(err);
           expect(res.status).to.equal(200);
           expect(res.body.name).to.equal(updated.name);
+          done();
+        });
+      });
+
+      it('should return a 404', done => {
+        let updated = { name: '404 bakery'};
+
+        request.put(`${url}/api/bakery/12345`)
+        .send(updated)
+        .end((err, res) => {
+          expect(res.status).to.equal(404);
+          done();
+        });
+      });
+    });
+
+    describe('with an invalid body', function() {
+
+      beforeEach( done => {
+        new Bakery(exampleBakery).save()
+        .then( bakery => {
+          this.tempBakery = bakery;
+          done();
+        })
+        .catch(done);
+      });
+
+      afterEach( done => {
+        if (this.tempBakery) {
+          Bakery.remove({})
+          .then( () => done())
+          .catch(done);
+        }
+      });
+
+      it('should return a 400', done => {
+        request.put(`${url}/api/bakery/${this.tempBakery._id}`)
+        .send()
+        .end((err, res) => {
+          expect(res.status).equal(400);
           done();
         });
       });
