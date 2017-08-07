@@ -2,46 +2,50 @@
 
 const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
-const debug = require('debug')('pokemon:pokemon-route');
-const createError = require('http-errors');
+const debug = require('debug')('pokemon:pokemon-router');
+const Trainer = require('../model/trainer.js');
 const Pokemon = require('../model/pokemon.js');
 
 const pokemonRouter = module.exports = new Router();
 
-pokemonRouter.post('/api/pokemon', jsonParser, function(req, res, next) {
-  debug('POST: /api/pokemon');
+pokemonRouter.post('/api/pokemon/:pokemonID/pokemon', jsonParser, function(req, res, next){
+  debug('POST: /api/pokemon/:pokemonID/pokemon');
 
-  new Pokemon(req.body).save()
-  .then(pokemon => res.json(pokemon))
-  .catch(err => next(createError(400, err.message)));
+  Trainer.findByIdAndAddPokemon(req.params.trainerID, req.body)
+  .then( pokemon => res.json(pokemon))
+  .catch(next);
 });
 
-pokemonRouter.get('/api/pokemon/:id', function(req, res, next) {
-  debug('GET: /api/pokemon/:id');
+pokemonRouter.get('/api/pokemon/:pokemonID/pokemon/:id', function(req, res, next){
+  debug('GET: /api/pokemon/:pokemonID/pokemon/:id');
 
   Pokemon.findById(req.params.id)
-  .populate('pokemons')
   .then(pokemon => res.json(pokemon))
-  .catch(err => next(createError(404, err.message)));
+  .catch(next);
 });
 
-pokemonRouter.put('/api/pokemon/:id', jsonParser, function(req, res, next) {
-  debug('PUT: /api/pokemon/:id');
+pokemonRouter.put('/api/pokemon/:pokemonID/pokemon/:id',jsonParser , function(req, res, next) {
+  debug('PUT: /api/pokemon/:pokemonID/pokemon/:id');
 
-  if(!req.body.name) return next(createError(400, res.message));
+  if(Object.keys(req.body).length === 0) {
+    Pokemon.findById(req.params.id)
+    .then(pokemon => {
+      res.status(400);
+      res.json(pokemon);
+    })
+    .catch(next);
+    return;
+  }
 
-  Pokemon.findByIdAndUpdate(req.params.id, req.body, {'new': true})
+  Pokemon.findByIdAndUpdate(req.params.id, req.body, {new: true})
   .then(pokemon => res.json(pokemon))
-  .catch(err => {
-    if(err.name === 'ValidationError') return next(err);
-    next(createError(404, err.message));
-  });
+  .catch(next);
 });
 
-pokemonRouter.delete('/api/pokemon/:id', function(req, res, next) {
-  debug('DELETE: /api/pokemon/:id');
+pokemonRouter.delete('/api/pokemon/:pokemonID/pokemon/:id', function (req, res , next) {
+  debug('DELETE: /api/pokemon/:pokemonID/pokemon/:id');
 
   Pokemon.findByIdAndRemove(req.params.id)
   .then(() => res.status(204).send())
-  .catch(err => next(createError(404, err.message)));
+  .catch(next);
 });

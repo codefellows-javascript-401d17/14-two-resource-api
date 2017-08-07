@@ -33,7 +33,7 @@ const exampleTrainer = {
 describe('Pokemon Routes', function(){
   describe('POST :/api/pokemon/:pokemonID/pokemon', function(){
     describe('with a valid list id and pokemon body', () => {
-      before(done => {
+      before( done => {
         new Trainer(exampleTrainer).save()
         .then(trainer => {
           this.tempTrainer = trainer;
@@ -42,7 +42,7 @@ describe('Pokemon Routes', function(){
         .catch(done);
       });
 
-      after( done => {
+      after(done => {
         Promise.all([
           Trainer.remove({}),
           Pokemon.remove({})
@@ -52,7 +52,7 @@ describe('Pokemon Routes', function(){
       });
 
       it('should return a pokemon', done => {
-        request.post(`${url}/api/brewery/${this.tempBrewery._id}/beer`)
+        request.post(`${url}/api/pokemon/${this.tempPokemon._id}/pokemon`)
         .send(examplePokemon)
         .end((err, res) => {
           if(err) return done(err);
@@ -64,13 +64,13 @@ describe('Pokemon Routes', function(){
       });
     });
   });
-  describe('GET: /api/pokemon/:pokemonID/pokemon/:id', function() {
+  describe('GET: /api/poekmon/:poekmonID/pokemon/:id', function() {
     describe('with a valid body', function() {
-      before( done => {
+      before(done => {
         new Trainer(exampleTrainer).save()
         .then(trainer => {
           this.tempTrainer = trainer;
-          return Trainer.findByIdAndAddPokemon(trainer._id, examplePokemon);
+          return Trainer.findByIdAndAddBeer(trainer._id, examplePokemon);
         })
         .then(pokemon => {
           this.tempPokemon = pokemon;
@@ -93,7 +93,7 @@ describe('Pokemon Routes', function(){
         .end((err, res) => {
           if(err) return done(err);
           expect(res.status).to.equal(200);
-          expect(res.body.name).to.equal('test beer');
+          expect(res.body.name).to.equal('test name');
           expect(res.body.type).to.equal('test type');
           expect(res.body.gen).to.equal('test gen');
           done();
@@ -101,7 +101,7 @@ describe('Pokemon Routes', function(){
       });
 
       it('should return 404 not found', done => {
-        request.get(`${url}/api/pokemon/${this.tempPokemon._id}/pokemon/156870`)
+        request.get(`${url}/api/trainer/${this.tempTrainer._id}/beer/13247893`)
         .end((err, res) => {
           expect(res.status).to.equal(404);
           done();
@@ -110,7 +110,7 @@ describe('Pokemon Routes', function(){
     });
   });
 
-  describe('PUT: /api/pokemon/:pokemonID/beer/:id', function() {
+  describe('PUT: /api/pokemon/:pokemonID/pokemon/:id', function() {
     describe('with a valid body', function() {
       before(done => {
         new Trainer(exampleTrainer).save()
@@ -135,7 +135,7 @@ describe('Pokemon Routes', function(){
       });
 
       it('should return a pokemon', done => {
-        request.put(`${url}/api/pokemon/${this.tempPokemon._id}/pokemon/${this.tempPokemon._id}`)
+        request.put(`${url}/api/pokemon/${this.tempTrainer._id}/pokemon/${this.tempPokemon._id}`)
         .send(exampleNewPokemon)
         .end((err, res) => {
           if(err) return done(err);
@@ -148,7 +148,7 @@ describe('Pokemon Routes', function(){
       });
 
       it('should return 400 bad request', done => {
-        request.put(`${url}/api/pokemon/${this.tempPokemon._id}/pokemon/${this.tempPokemon._id}`)
+        request.put(`${url}/api/pokemon/${this.tempTrainer._id}/pokemon/${this.tempPokemon._id}`)
         .send(null)
         .end((err, res) => {
           expect(res.status).to.equal(400);
@@ -157,7 +157,7 @@ describe('Pokemon Routes', function(){
       });
 
       it('should return 404 not found', done => {
-        request.put(`${url}/api/pokemon/${this.tempPokemon._id}/pokemon/16432345`)
+        request.put(`${url}/api/pokemon/${this.tempPokemon._id}/pokemon/12345`)
         .send(null)
         .end((err, res) => {
           expect(res.status).to.equal(404);
@@ -169,11 +169,11 @@ describe('Pokemon Routes', function(){
   describe('DELETE: /api/pokemon/:pokemonID/pokemon/:id', function() {
     describe('with valid id', function() {
 
-      before(done => {
+      before( done => {
         new Trainer(exampleTrainer).save()
         .then(trainer => {
-          this.tempTrainer= trainer;
-          return Trainer.findByIdAndAddBeer(trainer._id, examplePokemon);
+          this.tempTrainer = trainer;
+          return Trainer.findByIdAndAddPokemon(trainer._id, examplePokemon);
         })
         .then(pokemon => {
           this.tempPokemon = pokemon;
@@ -183,7 +183,7 @@ describe('Pokemon Routes', function(){
       });
 
       it('should return 204', done => {
-        request.delete(`${url}/api/pokemon/${this.tempPokemon._id}/pokemon/${this.tempPokemon._id}`)
+        request.delete(`${url}/api/pokemon/${this.tempTrainer._id}/pokemon/${this.tempPokemon._id}`)
         .end((err, res) => {
           expect(res.status).to.equal(204);
           done();
@@ -191,7 +191,7 @@ describe('Pokemon Routes', function(){
       });
 
       it('should return 404 not found', done => {
-        request.delete(`${url}/api/pokemon/${this.tempPokemon._id}/pokemon/3278931`)
+        request.delete(`${url}/api/pokemon/${this.tempTrainer._id}/beer/1247784391`)
         .end((err, res) => {
           expect(res.status).to.equal(404);
           done();
