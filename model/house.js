@@ -2,36 +2,38 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const debug = require('debug')('char:house');
+const debug = require('debug')('got:house');
 const createError = require('http-errors');
-const Char = require('./char.js');
+
+const Character = require('./character.js');
 
 const houseSchema = Schema({
-  familyName: { type: String, required: true },
-  seat: { type: String, require: true },
-  region: { type: String, require: true },
-  words: { type: String, require: true },
-  characters: [{ type: Schema.Types.ObjectId, ref: 'char'}]
+  name: { type: String, required: true },
+  seat: { type: String, required: true },
+  region: { type: String, required: true },
+  words: { type: String, required: true },
+  timestamp: { type: Date, required: true },
+  characters: [{ type: Schema.Types.ObjectId, ref: 'character' }]
 });
 
 const House = module.exports = mongoose.model('house', houseSchema);
 
-House.findByIdAndAddChar = function(id, char) {
-  debug('findByIdAndAddChar');
+House.findByIdAndAddCharacter = function(id, character) {
+  debug('find by id and add character');
 
   return House.findById(id)
   .catch(err => Promise.reject(createError(404, err.message)))
   .then(house => {
-    char.houseID = house._id;
+    character.houseID = house._id;
     this.tempHouse = house;
-    return new Char(char).save();
+    return new Character(character).save();
   })
-  .then(char => {
-    this.tempHouse.characters.push(char._id);
-    this.tempChar = char;
+  .then(character => {
+    this.tempHouse.characters.push(character._id);
+    this.tempChar = character;
     return this.tempHouse.save();
   })
   .then(() => {
-    return this.tempChar;
+    return this.tempHouse;
   });
-};
+}

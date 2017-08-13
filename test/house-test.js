@@ -3,27 +3,34 @@
 const expect = require('chai').expect;
 const request = require('superagent');
 const House = require('../model/house.js');
+const Character = require('../model/character.js');
+
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
-
 mongoose.Promise = Promise;
 require('../server.js');
-
 const url = `http://localhost:${PORT}`;
-const exampleHouse = {
-  familyName: 'Atreides',
-  seat: 'Arrakeen',
-  region: 'Arrakis',
-  words: 'Fear is the Mind-Killer'
-};
 
-const exampleChar = {
+const exampleHouse = {
+  name: 'Atreides',
+  seat: 'Caladan',
+  region: 'Delta Pavonis',
+  words: 'Fear is the Mind-Killer',
+  timestamp: new Date;
+}
+
+const updateHouse = {
+  seat: 'Arrakeen',
+  region: 'Arrakis'
+}
+
+const exampleCharacter = {
   name: 'Paul'
-};
+}
 
 describe('House Routes', function() {
   describe('POST: /api/house', function() {
-    describe('with a valid req body', function() {
+    describe('with a valid request body', function() {
       after(done => {
         if(this.tempHouse) {
           House.remove({})
@@ -37,12 +44,21 @@ describe('House Routes', function() {
       it('should return a house', done => {
         request.post(`${url}/api/house`)
         .send(exampleHouse)
-        .end((err, res) => {
+        .end((err, response) => {
           if(err) return done(err);
-          expect(res.status).to.equal(200);
-          expect(res.body.familyName).to.equal('Atreides');
-          this.tempHouse = res.body;
+          expect(response.status).to.equal(200);
+          expect(response.body.name).to.equal('Atreides');
+          expect(response.body.seat).to.equal('Caladan');
+          this.tempHouse = response.body;
           done();
+        });
+      });
+
+      it('should return status 400', done => {
+        request.post(`${url}/api/house/`)
+        .send({ hodor: 'hodor' })
+        .end((err, response) => {
+          expect(response.status).to.equal(400);
         });
       });
     });
@@ -50,23 +66,23 @@ describe('House Routes', function() {
 
   describe('GET: /api/house/:id', function() {
     describe('with a valid body', function() {
-      before(done => {
+      before( done => {
         new House(exampleHouse).save()
-        .then(house => {
+        .then( house => {
           this.tempHouse = house;
-          return House.findByIdAndAddChar(house._id, exampleChar);
+          return House.findByIdAndAddCharacter(house._id, exampleCharacter);
         })
-        .then(char => {
-          this.tempChar = char;
+        .then(character => {
+          this.tempCharacter = character;
           done();
         })
         .catch(done);
       });
 
-      after(done => {
+      after( done => {
         if(this.tempHouse) {
           House.remove({})
-          .then(() => done())
+          .then( () => done())
           .catch(done);
           return;
         }
@@ -75,12 +91,12 @@ describe('House Routes', function() {
 
       it('should return a house', done => {
         request.get(`${url}/api/house/${this.tempHouse._id}`)
-        .end((err, res) => {
+        .end((err, response) => {
           if(err) return done(err);
-          expect(res.status).to.equal(200);
-          expect(res.body.familyName).to.equal('Atreides');
-          expect(res.body.characters.length).to.equal(1);
-          expect(res.body.characters[0].name).to.equal(exampleChar.name);
+          expect(response.status).to.equal(200);
+          expect(response.body.name).to.equal('Atreides');
+          expect(response.body.characters.length).to.equal(1);
+          expect(response.body.characters[0].name).to.equal('Paul');
           done();
         });
       });
@@ -94,7 +110,7 @@ describe('House Routes', function() {
         .then(house => {
           this.tempHouse = house;
           done();
-        })
+        });
         .catch(done);
       });
 
@@ -104,20 +120,21 @@ describe('House Routes', function() {
           .then(() => done())
           .catch(done);
         }
+        done();
       });
 
-      it('should return a house', done => {
-        var updated = { familyName: 'Harkonnen' };
-
+      it('should return a character', done => {
         request.put(`${url}/api/house/${this.tempHouse._id}`)
-        .send(updated)
-        .end((err, res) => {
+        .send(updateHouse)
+        .end(err, response) => {
           if(err) return done(err);
-          expect(res.status).to.equal(200);
-          expect(res.body.familyName).to.equal(updated.familyName);
+          let timestamp = new Date(response.body.timestamp);
+          expect(response.status).to.equal(200);
+          expect(response.body.seat).to.equal('Arrakeen');
+          expect(timestamp.toString()).to.equal(exampleHouse.timestamp.toString());
           done();
-        });
-      });
+        }
+      })
     });
   });
 });

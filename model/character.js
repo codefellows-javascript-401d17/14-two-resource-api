@@ -8,4 +8,4 @@ const charSchema = Schema({
   houseID: { type: Schema.Types.ObjectId, required: true }
 });
 
-module.exports = mongoose.model('char', charSchema);
+const Character = module.exports = mongoose.model('character', charSchema);
